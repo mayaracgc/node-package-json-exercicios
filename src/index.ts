@@ -76,3 +76,70 @@ app.post('/purchase', (req: Request, res: Response) => {
     purchase.push(newPurchase)
     res.status(201).send("Produto cadastrado com sucesso!")
 });
+
+app.get('/products/:id', (req:Request, res: Response) => {
+    const id = req.params.id
+    const result = products.find((products) => products.id === id)
+    res.status(200).send(result)
+});
+
+app.get('/users/:id/purchase', (req: Request, res: Response) => {
+    const id = req.params.id 
+    const result = purchase.find((purchase) => purchase.userId === id)
+    res.status(200).send(result)
+});
+
+app.delete('/users/:id', (req: Request, res: Response) => {
+    const id = req.params.id
+    const usersIndex = users.findIndex((users) => users.id === id)
+    if(usersIndex >= 0){
+        users.splice(usersIndex, 1)
+    }
+    res.status(200).send("Usuário desligado com sucesso!")
+});
+
+app.delete('/products/:id', (req: Request, res: Response) => {
+    const id = req.params.id
+    const productsIndex = products.findIndex((products) => products.id === id)
+    if(productsIndex >= 0){
+        users.splice(productsIndex, 1)
+    }
+    res.status(200).send("Produto desligado com sucesso!")
+});
+
+app.put('/users/:id', (req: Request, res: Response) => {
+    const id = req.params.id
+
+    const newId = req.body.id as string | undefined
+    const newEmail = req.body.email as string | undefined
+    const newPassword = req.body.password as string | undefined
+
+    const user = users.find((user) => user.id ===id)
+
+    if(user){
+        user.id = newId || user.id
+        user.email = newEmail || user.email
+        user.password = newPassword || user.password
+    }
+    res.status(200).send("Cadastro atualizado com sucesso!")
+});
+
+app.put('/products/:id', (req: Request, res: Response) => {
+    const id = req.params.id
+
+    const newId = req.body.id as string | undefined
+    const newName = req.body.name as string | undefined
+    const newPrice = req.body.price as number 
+    const newCategory = req.body.category as CATEGORY | undefined
+
+    const product = products.find((product) => product.id ===id)
+
+    if(product){
+        product.id = newId || product.id
+        product.name = newName || product.name
+        product.category = newCategory || product.category
+
+        product.price = isNaN(newPrice) ? product.price: newPrice
+    }
+    res.status(200).send("Produto atualizado com sucesso!")
+});
