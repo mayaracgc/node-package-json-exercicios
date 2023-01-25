@@ -104,3 +104,36 @@ LIMIT 20;
 SELECT * FROM products
 WHERE price >= 50 AND price <=100
 ORDER BY price ASC;
+
+--Criação da tabela de pedidos
+CREATE TABLE purchases(
+    id TEXT PRIMARY KEY UNIQUE NOT NULL,
+    total_price REAL NOT NULL,
+    paid INTEGER NOT NULL,
+    delivered_at TEXT,
+    buyerd_id TEXT NOT NULL,
+    FOREIGN KEY (buyerd_id) REFERENCES users (id)
+);
+
+DROP TABLE purchases;
+
+--Crie dois pedidos para cada usuário cadastrado
+INSERT INTO  purchases (id, total_price, paid, buyerd_id)
+VALUES ("pr001", 165.00, 0, "a001"),
+        ("pr002", 95.00, 0, "a001"),
+        ("pr003", 80.00, 0, "a003"),
+        ("pr004", 45.00, 0, "a003");
+
+SELECT * FROM purchases;
+
+--Edite o status da data de entrega de um pedido
+UPDATE purchases
+SET delivered_at = datetime()
+WHERE id = "pr002";
+
+--simular um endpoint de histórico de compras de um determinado usuário.
+SELECT * FROM purchases
+INNER JOIN users
+ON purchases.buyerd_id = users.id
+WHERE users.id = "a001";
+
