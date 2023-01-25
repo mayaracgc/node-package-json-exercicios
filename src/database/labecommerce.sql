@@ -107,12 +107,12 @@ ORDER BY price ASC;
 
 --Criação da tabela de pedidos
 CREATE TABLE purchases(
-    id TEXT PRIMARY KEY UNIQUE NOT NULL,
-    total_price REAL NOT NULL,
-    paid INTEGER NOT NULL,
-    delivered_at TEXT,
-    buyerd_id TEXT NOT NULL,
-    FOREIGN KEY (buyerd_id) REFERENCES users (id)
+        id TEXT PRIMARY KEY UNIQUE NOT NULL,
+        total_price REAL NOT NULL,
+        paid INTEGER NOT NULL,
+        delivered_at TEXT,
+        buyerd_id TEXT NOT NULL,
+        FOREIGN KEY (buyerd_id) REFERENCES users (id)
 );
 
 DROP TABLE purchases;
@@ -136,4 +136,38 @@ SELECT * FROM purchases
 INNER JOIN users
 ON purchases.buyerd_id = users.id
 WHERE users.id = "a001";
+
+--Criação da tabela de relações
+CREATE TABLE purchases_products(
+        purchase_id TEXT NOT NULL,
+        product_id TEXT NOT NULL,
+        quantity INTEGER NOT NULL,
+        FOREIGN KEY (purchase_id) REFERENCES purchases (id),
+        FOREIGN KEY (product_id) REFERENCES products (id)
+);
+
+DROP TABLE purchases_products;
+
+--Popule sua tabela purchases_products simulando 3 compras de clientes.
+INSERT INTO purchases_products (purchase_id, product_id, quantity)
+VALUES ("pr001", "p017", 1),
+        ("pr002", "p003", 1),
+        ("pr003", "p002", 1);
+
+SELECT * FROM purchases_products;
+
+SELECT 
+purchases.id AS purchaseId,
+purchases.total_price AS totalPrice,
+purchases.paid,
+purchases.delivered_at AS deliveredAt,
+purchases.buyerd_id AS buyerdId,
+products.id AS productId,
+products.name AS productName,
+products.price
+FROM purchases
+LEFT JOIN purchases_products
+ON purchases_products.purchase_id = purchases.id
+INNER JOIN products
+on purchases_products.product_id = products.id;
 
