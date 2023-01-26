@@ -1,5 +1,6 @@
 export type TUser = {
     id: string,
+    name: string,
     email: string,
     password: string
 }
@@ -7,7 +8,8 @@ export type TUser = {
 export enum CATEGORY {
     LIGTH_ROAST = "Torra Clara",
     MEDIUM_ROAST = "Torra Média",
-    DARK_ROAST = "Torra Escura"
+    DARK_ROAST = "Torra Escura",
+    KITS = "Kits"
 }
 
 export type TProduct = {

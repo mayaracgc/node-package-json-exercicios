@@ -1,36 +1,38 @@
 -- Active: 1674495210543@@127.0.0.1@3306
 CREATE TABLE users(
-    id TEXT PRIMARY KEY UNIQUE NOT NULL,
-    name TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL
+        id TEXT PRIMARY KEY UNIQUE NOT NULL,
+        name TEXT NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        created_at TEXT
 );
 
 DROP TABLE users;
 
-INSERT INTO users (id, name, email, password)
-VALUES ("a001", "João", "joao@gmail.com", "1234"),
-        ("a002", "Maria", "maria@gmail.com", "5678"),
-        ("a003", "José", "josé@gmail.com", "0910");
+INSERT INTO users (id, name, email, password, created_at)
+VALUES ("a001", "João", "joao@gmail.com", "1234", ""),
+        ("a002", "Maria", "maria@gmail.com", "5678", ""),
+        ("a003", "José", "josé@gmail.com", "0910", "");
 
 
 CREATE TABLE products(
-    id TEXT PRIMARY KEY UNIQUE NOT NULL,
-    name TEXT NOT NULL,
-    price REAL NOT NULL,
-    category TEXT NOT NULL
+        id TEXT PRIMARY KEY UNIQUE NOT NULL,
+        name TEXT NOT NULL,
+        price REAL NOT NULL,
+        description TEXT NOT NULL,
+        imageUrl TEXT 
 );
 
 DROP TABLE products;
 
-INSERT INTO products (id, name, price, category)
-VALUES ("p001", "Café Geisha", 60.00, "Torra Média"), 
-        ("p002", "Café Acaiá", 80.00, "Torra Clara"), 
-        ("p003", "Café Kona", 95.00, "Torra Escura"),
-        ("p004", "Café Catuaí", 45.00, "Torra Escura"), 
-        ("p005", "Café Robusta", 50.00, "Torra Escura"), 
-        ("p006", "Café Arábica", 40.00, "Torra Clara"), 
-        ("p007", "Café Bourbon", 60.00, "Torra Média");
+INSERT INTO products (id, name, price, description, imageUrl)
+VALUES ("p001", "Café Geisha", 60.00, "Torra Média", "https://mitocafesespeciais.com.br/assets/img/dist/nivel-torra-media.png"), 
+        ("p002", "Café Acaiá", 80.00, "Torra Clara", "https://mitocafesespeciais.com.br/assets/img/dist/nivel-torra-clara.png"), 
+        ("p003", "Café Kona", 95.00, "Torra Escura", "https://mitocafesespeciais.com.br/assets/img/dist/nivel-torra-escura.png"),
+        ("p004", "Café Catuaí", 45.00, "Torra Escura", "https://mitocafesespeciais.com.br/assets/img/dist/nivel-torra-escura.png"), 
+        ("p005", "Café Robusta", 50.00, "Torra Escura", "https://mitocafesespeciais.com.br/assets/img/dist/nivel-torra-clara.png"), 
+        ("p006", "Café Arábica", 40.00, "Torra Clara", "https://mitocafesespeciais.com.br/assets/img/dist/nivel-torra-clara.png"), 
+        ("p007", "Café Bourbon", 60.00, "Torra Média", "https://mitocafesespeciais.com.br/assets/img/dist/nivel-torra-media.png");
 
 
 --retorna todos os usuários cadastrados
@@ -48,24 +50,24 @@ INSERT INTO users (id, name, email, password)
 VALUES ("a004", "Ana", "ana@gmail.com", "1112");
 
 --insere o item mockado na tabela products
-INSERT INTO products (id, name, price, category)
-VALUES ("p008", "Café Di Pássaro", 75.00, "Torra Média"),
-        ("p009", "Café Arara", 45.00, "Torra Clara"),
-        ("p010", "Café Clássico", 34.00, "Torra Média"),
-        ("p011", "Café Mantiqueira de Minas", 38.00, "Torra Média"),
-        ("p012", "Café Chapada de Minas", 45.00, "Torra Escura"),
-        ("p013", "Café Cerrado Mineiro", 55.00, "Torra Clara"),
-        ("p0014", "Kit 3 Cafés Moídos", 120.00, "Kit"),
-        ("p015", "Kit 4 Cafés Moídos", 140.00, "Kit"),
-        ("p016", "Kit 3 Cafés em Grãos", 150.00, "Kit"),
-        ("p017", "Kit 4 Cafés Moídos", 165.00, "Kit"),
-        ("p018", "Kit 30 Cápsulas de Café", 82.00, "Kit"),
-        ("p019", "Kit 40 Cápsulas de Café", 92.00, "Kit"),
-        ("p020", "Kit 50 Cápsulas de Café", 102.00, "Kit"),
-        ("p021", "Kit 3 Drips de Café", 115.00, "Kit"),
-        ("p022", "Kit 4 Drips de Café", 125.00, "Kit"),
-        ("p023", "Kit 3 Drips de Café + 1 Café Moído", 127.00, "Kit"),
-        ("p024", "Kit 4 Drips de Café + 1 Café Moído", 137.00, "Kit");
+-- INSERT INTO products (id, name, price, description)
+-- VALUES ("p008", "Café Di Pássaro", 75.00, "Torra Média"),
+--         ("p009", "Café Arara", 45.00, "Torra Clara"),
+--         ("p010", "Café Clássico", 34.00, "Torra Média"),
+--         ("p011", "Café Mantiqueira de Minas", 38.00, "Torra Média"),
+--         ("p012", "Café Chapada de Minas", 45.00, "Torra Escura"),
+--         ("p013", "Café Cerrado Mineiro", 55.00, "Torra Clara"),
+--         ("p0014", "Kit 3 Cafés Moídos", 120.00, "Kit"),
+--         ("p015", "Kit 4 Cafés Moídos", 140.00, "Kit"),
+--         ("p016", "Kit 3 Cafés em Grãos", 150.00, "Kit"),
+--         ("p017", "Kit 4 Cafés Moídos", 165.00, "Kit"),
+--         ("p018", "Kit 30 Cápsulas de Café", 82.00, "Kit"),
+--         ("p019", "Kit 40 Cápsulas de Café", 92.00, "Kit"),
+--         ("p020", "Kit 50 Cápsulas de Café", 102.00, "Kit"),
+--         ("p021", "Kit 3 Drips de Café", 115.00, "Kit"),
+--         ("p022", "Kit 4 Drips de Café", 125.00, "Kit"),
+--         ("p023", "Kit 3 Drips de Café + 1 Café Moído", 127.00, "Kit"),
+--         ("p024", "Kit 4 Drips de Café + 1 Café Moído", 137.00, "Kit");
 
 --busca baseada no valor mockado
 SELECT * FROM products
@@ -108,7 +110,7 @@ ORDER BY price ASC;
 --Criação da tabela de pedidos
 CREATE TABLE purchases(
         id TEXT PRIMARY KEY UNIQUE NOT NULL,
-        total_price REAL NOT NULL,
+        totalPrice REAL NOT NULL,
         paid INTEGER NOT NULL,
         delivered_at TEXT,
         buyerd_id TEXT NOT NULL,
@@ -118,7 +120,7 @@ CREATE TABLE purchases(
 DROP TABLE purchases;
 
 --Crie dois pedidos para cada usuário cadastrado
-INSERT INTO  purchases (id, total_price, paid, buyerd_id)
+INSERT INTO  purchases (id, totalPrice, paid, buyerd_id)
 VALUES ("pr001", 165.00, 0, "a001"),
         ("pr002", 95.00, 0, "a001"),
         ("pr003", 80.00, 0, "a003"),
