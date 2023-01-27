@@ -273,18 +273,17 @@ app.get("/users/:id/purchase", async (req: Request, res: Response) => {
     }
 });
 
-app.delete("/users/:id", (req: Request, res: Response) => {
+app.delete("/users/:id", async (req: Request, res: Response) => {
     try {
         const id = req.params.id
-        if(id[0] !== "a"){
+        const [ user ] = await db("users").where({id: id})
+
+        if(user.id[0] !== "a"){
             res.status(400)
             throw new Error("Id inválido. Usuário deve iniciar com a letra 'a'.")
         }
 
-        const usersIndex = users.findIndex((users) => users.id === id)
-        if(usersIndex >= 0){
-            users.splice(usersIndex, 1)
-        }
+        await db("users").del().where({id: id})
 
         res.status(200).send("Usuário desligado com sucesso!")
 
@@ -298,18 +297,17 @@ app.delete("/users/:id", (req: Request, res: Response) => {
     }
 });
 
-app.delete("/products/:id", (req: Request, res: Response) => {
+app.delete("/products/:id", async (req: Request, res: Response) => {
     try {
         const id = req.params.id
-        if(id[0] !== "b"){
+        const [ product ] = await db("products").where({id: id})
+
+        if(product.id[0] !== "p"){
             res.status(400)
-            throw new Error("Id inválido. Produto deve iniciar com a letra 'b'.")
+            throw new Error("Id inválido. Produto deve iniciar com a letra 'p'.")
         }
 
-        const productsIndex = products.findIndex((products) => products.id === id)
-        if(productsIndex >= 0){
-            users.splice(productsIndex, 1)
-        }
+        await db("products").del().where({id: id})
 
         res.status(200).send("Produto desligado com sucesso!")
 
@@ -323,13 +321,14 @@ app.delete("/products/:id", (req: Request, res: Response) => {
     }
 });
 
-app.put("/users/:id", (req: Request, res: Response) => {
+app.put("/users/:id", async (req: Request, res: Response) => {
     try {
         const id = req.params.id
 
-        const newId = req.body.id as string | undefined
-        const newEmail = req.body.email as string | undefined
-        const newPassword = req.body.password as string | undefined
+        const newId = req.body.id 
+        const newName = req.body.name 
+        const newEmail = req.body.email 
+        const newPassword = req.body.password 
 
         if(newId !== undefined){
             if(typeof newId !== "string"){
@@ -339,6 +338,12 @@ app.put("/users/:id", (req: Request, res: Response) => {
             if(newId[0] !== "a"){
                 res.status(400)
                 throw new Error("'id' inválido. Deve iniciar com a letra 'a'.")
+            }
+        }
+        if(newName !== undefined){
+            if(typeof newName !== "string"){
+                res.status(400)
+                throw new Error("NewName deve ser uma string.")
             }
         }
         if(newEmail !== undefined){
@@ -354,12 +359,19 @@ app.put("/users/:id", (req: Request, res: Response) => {
             }
         }
     
-        const user = users.find((user) => user.id === id)
+        const [user] = await db("users").where({id: id})
     
         if(user){
-            user.id = newId || user.id
-            user.email = newEmail || user.email
-            user.password = newPassword || user.password
+            const updateUser = {
+            id: newId || user.id,
+            name: newName || user.name,
+            email: newEmail || user.email,
+            password: newPassword || user.password
+            }
+        await db("users").update(updateUser).where({id: id})
+        }else{
+            res.status(404)
+            throw new Error("Id não encontrada.")
         }
 
         res.status(200).send("Cadastro atualizado com sucesso!")
@@ -374,23 +386,24 @@ app.put("/users/:id", (req: Request, res: Response) => {
     }
 });
 
-app.put("/products/:id", (req: Request, res: Response) => {
+app.put("/products/:id", async (req: Request, res: Response) => {
     try {
         const id = req.params.id
 
-        const newId = req.body.id as string | undefined
-        const newName = req.body.name as string | undefined
-        const newPrice = req.body.price as number | undefined
-        const newCategory = req.body.category as CATEGORY | undefined
+        const newId = req.body.id 
+        const newName = req.body.name
+        const newPrice = req.body.price
+        const newDescripition = req.body.description
+        const newImageUrl = req.body.imageUrl
 
         if(newId !== undefined){
             if(typeof newId !== "string"){
                 res.status(400)
                 throw new Error("'id' inválido. id deve ser uma string.")
             }
-            if(newId[0] !== "b"){
+            if(newId[0] !== "p"){
                 res.status(400)
-                throw new Error("'id' inválido. Deve iniciar com a letra 'b'.")
+                throw new Error("'id' inválido. Deve iniciar com a letra 'p'.")
             }
         }
         if(newName !== undefined){
@@ -409,24 +422,31 @@ app.put("/products/:id", (req: Request, res: Response) => {
                 throw new Error("Price não deve ser negativo")
             }
         }
-        if(typeof newCategory !== undefined){
-            if(
-                newCategory !== "Torra Clara" &&
-                newCategory !== "Torra Média" &&
-                newCategory !== "Torra Escura"
-            ){
-                return res.status(400).send("Category deve ser uma uma categoria válida.")
+        if(newDescripition !== undefined){
+            if(typeof newDescripition !== "string"){
+                res.status(400)
+                throw new Error("NewDescription deve ser uma string.")
+            }
+        }
+        if(newImageUrl !== undefined){
+            if(typeof newImageUrl !== "string"){
+                res.status(400)
+                throw new Error("newImageUrl deve ser uma string.")
             }
         }
     
-        const product = products.find((product) => product.id ===id)
+        const [product] = await db("products").where({id: id})
     
         if(product){
-            product.id = newId || product.id
-            product.name = newName || product.name
-            product.category = newCategory || product.category
+            const updateProduct = {
+            id: newId || product.id,
+            name: newName || product.name,
+            description: newDescripition || product.description,
+            imageUrl: newImageUrl || product.imageUrl,
     
-            product.price = isNaN(newPrice) ? product.price: newPrice
+            price: isNaN(newPrice) ? product.price: newPrice
+            }
+            await db("products").update(updateProduct).where({id: id})
         }
 
         res.status(200).send("Produto atualizado com sucesso!")
